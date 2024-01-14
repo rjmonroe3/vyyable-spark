@@ -43,9 +43,9 @@ def main():
     st.title('Google Trends Search with Streamlit and Pytrends')
 
     # User input for keywords
-    keyword1 = st.text_input('Enter Keyword 1:', 'Python')
-    keyword2 = st.text_input('Enter Keyword 2:', 'Data Science')
-    keyword3 = st.text_input('Enter Keyword 3:', 'Machine Learning')
+    keyword1 = st.text_input('Enter Keyword 1:', '')
+    keyword2 = st.text_input('Enter Keyword 2:', '')
+    keyword3 = st.text_input('Enter Keyword 3:', '')
     keywords = [keyword1, keyword2, keyword3]
 
     if st.button('Search Trends'):
@@ -59,6 +59,10 @@ def main():
 
         # Display related keywords
         display_related_keywords(related_queries_dict)
+
+         # Add reset button
+        if st.button('Reset'):
+            st.experimental_rerun()
 
 if __name__ == '__main__':
     main()
