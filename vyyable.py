@@ -2,8 +2,6 @@
 # My first app
 Here's our first attempt at using data to create a table:
 """
-import plotly.express as px
-import seaborn as sns
 from datetime import datetime
 from datetime import timedelta
 import numpy as np
