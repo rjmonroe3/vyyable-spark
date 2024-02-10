@@ -46,15 +46,15 @@ def get_google_trends_data(keywords, timeframe='today 12-m'):
     return None, None
 
 def plot_trends(interest_over_time_df):
-    plt.figure(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(10, 6))
     for column in interest_over_time_df.columns:
-        plt.plot(interest_over_time_df.index, interest_over_time_df[column], label=column)
+        ax.plot(interest_over_time_df.index, interest_over_time_df[column], label=column)
 
-    plt.title('Google Trends Over Time')
-    plt.xlabel('Date')
-    plt.ylabel('Interest')
-    plt.legend()
-    st.pyplot(figure)
+    ax.set_title('Google Trends Over Time')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Interest')
+    ax.legend()
+    st.pyplot(fig)
 
 def display_related_keywords(related_queries_dict):
     st.subheader('Related Keywords:')
