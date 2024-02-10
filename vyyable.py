@@ -10,18 +10,39 @@ import streamlit as st
 from pytrends.request import TrendReq
 import matplotlib.pyplot as plt
 import pandas as pd
+import time
 
 def get_google_trends_data(keywords, timeframe='today 12-m'):
     pytrends = TrendReq(hl='en-US', tz=360)
-    pytrends.build_payload(keywords, timeframe=timeframe)
-    interest_over_time_df = pytrends.interest_over_time()
 
+    max_retries = 5
+    backoff_factor = 2
+    sleep_time = 5  # Starting sleep time in seconds
+
+    interest_over_time_df = None
     related_queries_dict = {}
-    for keyword in keywords:
-        pytrends.build_payload([keyword], timeframe=timeframe)
-        related_queries_dict[keyword] = pytrends.related_queries()[keyword]['top']
 
-    return interest_over_time_df, related_queries_dict
+    for attempt in range(max_retries):
+        try:
+            pytrends.build_payload(keywords, timeframe=timeframe)
+            interest_over_time_df = pytrends.interest_over_time()
+
+            for keyword in keywords:
+                time.sleep(sleep_time)  # Delay between requests
+                pytrends.build_payload([keyword], timeframe=timeframe)
+                related_queries = pytrends.related_queries()
+                if related_queries and keyword in related_queries:
+                    related_queries_dict[keyword] = related_queries[keyword]['top']
+
+            return interest_over_time_df, related_queries_dict
+
+        except Exception as e:
+            st.error(f"Request failed, attempt {attempt + 1} of {max_retries}. Retrying in {sleep_time} seconds.")
+            time.sleep(sleep_time)
+            sleep_time *= backoff_factor  # Exponential backoff
+
+    st.error("Failed to fetch data from Google Trends after several attempts.")
+    return None, None
 
 def plot_trends(interest_over_time_df):
     plt.figure(figsize=(10, 6))
@@ -45,8 +66,7 @@ def main():
     # User input for keywords
     keyword1 = st.text_input('Enter Keyword 1:', '')
     keyword2 = st.text_input('Enter Keyword 2:', '')
-    keyword3 = st.text_input('Enter Keyword 3:', '')
-    keywords = [keyword1, keyword2, keyword3]
+    keywords = [keyword1, keyword2]
 
     if st.button('Search Trends'):
         st.info('Fetching data... Please wait.')
