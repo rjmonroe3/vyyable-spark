@@ -53,7 +53,7 @@ def plot_trends(interest_over_time_df):
     plt.xlabel('Date')
     plt.ylabel('Interest')
     plt.legend()
-    st.pyplot()
+    st.pyplot(fig)
 
 def display_related_keywords(related_queries_dict):
     st.subheader('Related Keywords:')
