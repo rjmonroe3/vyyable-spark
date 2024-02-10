@@ -45,8 +45,7 @@ def main():
     # User input for keywords
     keyword1 = st.text_input('Enter Keyword 1:', '')
     keyword2 = st.text_input('Enter Keyword 2:', '')
-    keyword3 = st.text_input('Enter Keyword 3:', '')
-    keywords = [keyword1, keyword2, keyword3]
+    keywords = [keyword1, keyword2]
 
     if st.button('Search Trends'):
         st.info('Fetching data... Please wait.')
