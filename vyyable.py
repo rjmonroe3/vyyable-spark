@@ -58,11 +58,17 @@ def plot_trends(interest_over_time_df):
 
 def display_related_keywords(related_queries_dict):
     st.subheader('Related Keywords:')
-    for keyword, related_keywords in related_queries_dict.items():
-        st.write(f"Related to {keyword}: {', '.join(related_keywords)}")
+    for keyword, related_keywords_df in related_queries_dict.items():
+        if not related_keywords_df.empty:
+            st.write(f"Related to {keyword}:")
+            #Iterate over the rows of the DataFrame to display each related keyword and its value
+            for index, row in related_keywords_df.iterrows():
+                st.write(f"{row['query']} (value: {row['value']})")
+        else:
+            st.write(f"No related keywords found for {keyword}.")
 
 def main():
-    st.title('Google Trends Search with Streamlit and Pytrends')
+    st.title('Google Trends Search')
 
     # User input for keywords
     keyword1 = st.text_input('Enter Keyword 1:', '')
