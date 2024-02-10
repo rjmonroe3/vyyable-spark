@@ -1,7 +1,3 @@
-"""
-# My first app
-Here's our first attempt at using data to create a table:
-"""
 from datetime import datetime
 from datetime import timedelta
 from matplotlib import figure
@@ -13,9 +9,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 
+#Setting up Google Trends
+
 def get_google_trends_data(keywords, timeframe='today 12-m'):
     pytrends = TrendReq(hl='en-US', tz=360)
 
+#limiting retries and adding sleep time for retries
     max_retries = 5
     backoff_factor = 2
     sleep_time = 5  # Starting sleep time in seconds
@@ -45,9 +44,10 @@ def get_google_trends_data(keywords, timeframe='today 12-m'):
     st.error("Failed to fetch data from Google Trends after several attempts.")
     return None, None
 
+#Adding graph to plot Google trends
 def plot_trends(interest_over_time_df):
     fig, ax = plt.subplots(figsize=(10, 6))
-    for column in interest_over_time_df.columns:
+    for column in interest_over_time_df.columns[:-1]:
         ax.plot(interest_over_time_df.index, interest_over_time_df[column], label=column)
 
     ax.set_title('Google Trends Over Time')
@@ -56,6 +56,7 @@ def plot_trends(interest_over_time_df):
     ax.legend()
     st.pyplot(fig)
 
+#Getting related keywords for keyword searched
 def display_related_keywords(related_queries_dict):
     st.subheader('Related Keywords:')
     for keyword, related_keywords_df in related_queries_dict.items():
@@ -73,7 +74,8 @@ def main():
     # User input for keywords
     keyword1 = st.text_input('Enter Keyword 1:', '')
     keyword2 = st.text_input('Enter Keyword 2:', '')
-    keywords = [keyword1, keyword2]
+    keyword3 = st.text_input('Enter Keyword 3:', '')
+    keywords = [keyword1, keyword2, keyword3]
 
     if st.button('Search Trends'):
         st.info('Fetching data... Please wait.')
