@@ -4,6 +4,7 @@ Here's our first attempt at using data to create a table:
 """
 from datetime import datetime
 from datetime import timedelta
+from matplotlib import figure
 import numpy as np
 from dateutil.relativedelta import *
 import streamlit as st
@@ -53,7 +54,7 @@ def plot_trends(interest_over_time_df):
     plt.xlabel('Date')
     plt.ylabel('Interest')
     plt.legend()
-    st.pyplot(fig)
+    st.pyplot(figure)
 
 def display_related_keywords(related_queries_dict):
     st.subheader('Related Keywords:')
